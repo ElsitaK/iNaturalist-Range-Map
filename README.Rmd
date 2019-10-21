@@ -33,7 +33,7 @@ world <- map_data("world")
 
 Using commands from package "rinat" to access data from the iNaturalist app and make some maps simply (without ggplot2).
 
-```{r iNaturalist}
+```{r iNaturalist, echo=FALSE}
 #how to get the data
 get_inat_obs(taxon_name = "Appalachian Brown")
 
