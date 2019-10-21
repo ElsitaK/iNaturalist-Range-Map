@@ -69,7 +69,7 @@ ggplot() +
 With ggplot commands, I can add some research sites to my map and color them.
 
 
-```{r ggplot2}
+```{r sites}
 setwd('~/iNaturalist-Range-Map')
 sites <- read.csv("Fake.Site.Coordinates.csv", stringsAsFactors = FALSE)
 research.data$Site <- "iNaturalist Observation" 
