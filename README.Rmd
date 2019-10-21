@@ -1,0 +1,79 @@
+---
+title: "Range Map for Appalachian Brown (Satyrodes appalachia)"
+author: "Elsita Kiekebusch"
+date: "10/20/2019"
+output: rmarkdown::github_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+knitr::opts_chunk$set(echo = TRUE)
+library(maps)
+library(rinat)
+library(dplyr)
+library(ggplot2) #i think i need this
+```
+
+## Maps
+
+Using the package "maps" to make some basic maps.
+
+```{r mapfun}
+#messing around with maps
+map(database="world", regions=".")
+map(database="usa", regions=".")
+
+#get the map data for later use
+usa <- map_data("usa")
+states <- map_data("state") #use this to make the state borders
+world <- map_data("world")
+```
+
+## iNaturalist
+
+Using commands from package "rinat" to access data from the iNaturalist app and make some maps simply (without ggplot2).
+
+```{r iNaturalist}
+#how to get the data
+get_inat_obs(taxon_name = "Appalachian Brown")
+
+#note taxon id is 132227
+data <- get_inat_obs(taxon_name = "Appalachian Brown")
+research.data <- data %>% filter(quality_grade == "research") #restricts to good quality observations
+map.data <- research.data %>% select(latitude, longitude) #I could have piped those together... 
+
+#MAKE MAP!
+inat_map(research.data, map = "usa", subregion = ".", plot = TRUE)
+
+#how to save the map
+ABB.map <- inat_map(research.data, map = "usa", subregion = ".", plot = FALSE)
+ABB.map #look
+
+#improvements
+ABB.map + borders("state") + theme_bw() + labs(x="Longitude", y="Latitude")
+
+```
+
+##Maps in ggplot2
+
+Now making maps with ggplot2, much more control using the usual ggplot2 commands. 
+
+```{r ggplot2}
+#only gives points
+ggplot(research.data, aes(latitude,longitude)) +
+  geom_point()
+
+#this is a very simple way of doing it, other fancier packages exist (eg "sf")
+#get map data eg:
+usa <- map_data("usa")
+states <- map_data("state") #use this to make the state borders
+world <- map_data("world")
+
+#basic map
+ggplot() +
+  geom_polygon(data = states, aes(x=long, y = lat, group = group), fill = NA, color = "black") + 
+  geom_point(data = research.data, aes(longitude, latitude), color="black") +
+  labs(x="Longitude", y="Latitude") +
+  coord_cartesian(xlim=c(-100,-60)) +
+  theme_bw()
+```
