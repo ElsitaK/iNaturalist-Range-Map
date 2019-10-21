@@ -37,7 +37,6 @@ Using commands from package "rinat" to access data from the iNaturalist app and 
 #get the data, save it for further use
 data <- get_inat_obs(taxon_name = "Appalachian Brown")
 research.data <- data %>% filter(quality_grade == "research") #restricts to good quality observations
-map.data <- research.data %>% select(latitude, longitude) #get lat, long coords
 
 #MAKE MAP!
 ABB.map <- inat_map(research.data, map = "usa", subregion = ".", plot = FALSE)
@@ -72,3 +71,33 @@ ggplot() +
 ```
 
 ![](README_files/figure-markdown_github/ggplot2-2.png)
+
+Research Sites
+--------------
+
+With ggplot commands, I can add some research sites to my map and color them.
+
+``` r
+setwd('~/Documents/NCSU/SERDP/ABB MAP')
+sites <- read.csv("Fake.Site.Coordinates.csv", stringsAsFactors = FALSE)
+```
+
+    ## Warning in read.table(file = file, header = header, sep = sep,
+    ## quote = quote, : incomplete final line found by readTableHeader on
+    ## 'Fake.Site.Coordinates.csv'
+
+``` r
+map.data <- research.data %>% select(latitude, longitude) #get lat, long coords only
+map.data$Site <- "iNaturalist Observation" 
+new.data <- rbind(sites,map.data)
+
+#basic map
+ggplot() +
+  geom_polygon(data = states, aes(x=long, y = lat, group = group), fill = NA, color = "black") + 
+  geom_point(data = new.data, aes(longitude, latitude, color=Site)) +
+  labs(x="Longitude", y="Latitude") +
+  coord_cartesian(xlim=c(-100,-60)) +
+  theme_bw()
+```
+
+![](README_files/figure-markdown_github/sites-1.png)
