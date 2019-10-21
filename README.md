@@ -80,13 +80,6 @@ With ggplot commands, I can add some research sites to my map and color them.
 ``` r
 setwd('~/Documents/NCSU/SERDP/ABB MAP')
 sites <- read.csv("Fake.Site.Coordinates.csv", stringsAsFactors = FALSE)
-```
-
-    ## Warning in read.table(file = file, header = header, sep = sep,
-    ## quote = quote, : incomplete final line found by readTableHeader on
-    ## 'Fake.Site.Coordinates.csv'
-
-``` r
 map.data <- research.data %>% select(latitude, longitude) #get lat, long coords only
 map.data$Site <- "iNaturalist Observation" 
 new.data <- rbind(sites,map.data)
