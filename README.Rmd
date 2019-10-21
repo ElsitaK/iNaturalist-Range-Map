@@ -63,3 +63,23 @@ ggplot() +
   coord_cartesian(xlim=c(-100,-60)) +
   theme_bw()
 ```
+
+##Research Sites
+
+With ggplot commands, I can add some research sites to my map and color them.
+
+
+```{r ggplot2}
+setwd('~/iNaturalist-Range-Map')
+sites <- read.csv("Fake.Site.Coordinates.csv", stringsAsFactors = FALSE)
+research.data$Site <- "iNaturalist Observation" 
+new.data <- rbind(sites,research.data)
+
+#basic map
+ggplot() +
+  geom_polygon(data = states, aes(x=long, y = lat, group = group), fill = NA, color = "black") + 
+  geom_point(data = new.data, aes(longitude, latitude), color=Site) +
+  labs(x="Longitude", y="Latitude") +
+  coord_cartesian(xlim=c(-100,-60)) +
+  theme_bw()
+```
