@@ -33,25 +33,17 @@ world <- map_data("world")
 
 Using commands from package "rinat" to access data from the iNaturalist app and make some maps simply (without ggplot2).
 
-```{r iNaturalist, echo=FALSE}
-#how to get the data
-get_inat_obs(taxon_name = "Appalachian Brown")
-
-#note taxon id is 132227
+```{r iNaturalist, echo=TRUE, results='hide'}
+#get the data, save it for further use
 data <- get_inat_obs(taxon_name = "Appalachian Brown")
 research.data <- data %>% filter(quality_grade == "research") #restricts to good quality observations
-map.data <- research.data %>% select(latitude, longitude) #I could have piped those together... 
+map.data <- research.data %>% select(latitude, longitude) #get lat, long coords
 
 #MAKE MAP!
-inat_map(research.data, map = "usa", subregion = ".", plot = TRUE)
-
-#how to save the map
 ABB.map <- inat_map(research.data, map = "usa", subregion = ".", plot = FALSE)
-ABB.map #look
 
 #improvements
 ABB.map + borders("state") + theme_bw() + labs(x="Longitude", y="Latitude")
-
 ```
 
 ##Maps in ggplot2
@@ -62,12 +54,6 @@ Now making maps with ggplot2, much more control using the usual ggplot2 commands
 #only gives points
 ggplot(research.data, aes(latitude,longitude)) +
   geom_point()
-
-#this is a very simple way of doing it, other fancier packages exist (eg "sf")
-#get map data eg:
-usa <- map_data("usa")
-states <- map_data("state") #use this to make the state borders
-world <- map_data("world")
 
 #basic map
 ggplot() +
