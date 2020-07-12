@@ -5,14 +5,26 @@ date: "10/20/2019"
 output: rmarkdown::github_document
 ---
 
-```{r setup, include = FALSE}
+```{r suppress, include = FALSE}
+#hide warning messages when loading packages
+defaultW <- getOption("warn") 
+options(warn = -1) 
+```
+
+```{r setup}
 require(knitr)
 knitr::opts_chunk$set(echo = TRUE)
 library(maps)
 library(rinat)
 library(dplyr)
-library(ggplot2) #i think i need this
+library(ggplot2)
 ```
+
+```{r unsuppress, include = FALSE}
+#keep warnings from here onward
+options(warn = defaultW)
+```
+
 
 ## Maps
 
